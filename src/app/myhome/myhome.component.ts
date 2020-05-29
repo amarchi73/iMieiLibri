@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { apiKey } from '../apiKey';
 
 @Component({
   selector: 'app-myhome',
@@ -6,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./myhome.component.css']
 })
 export class MyhomeComponent implements OnInit {
+  apikey: string;
 
   constructor() { }
 
   ngOnInit(): void {
+    this.apikey = apiKey[0].chiave;
   }
 
 }
