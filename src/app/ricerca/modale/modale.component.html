@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h5 class="modal-title text-center">Modal title xxxxxxxxxx</h5>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <p>modale works!</p>
+    {{name.title}}
+    <input [value]="name.title" (change)="onChange()"><br />
+    <textarea [value]="name.title"></textarea><br />
+    <label>
+        Name:
+        <input type="text" [formControl]="nomeValore" (change)="onChange()">
+    </label>
+    Value: {{ nomeValore.value }}
+</div>
+<div class="modal-footer">
+    <div class="left-side">
+        <button type="button" class="btn btn-default btn-link" (click)="activeModal.close('Close click')">Never mind</button>
+    </div>
+    <div class="divider"></div>
+    <div class="right-side">
+        <button type="button" class="btn btn-danger btn-link" (click)="activeModal.close('Close click')">DELETE</button>
+    </div>
+</div>

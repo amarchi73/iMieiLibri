@@ -1,5 +1,4 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
@@ -18,6 +17,13 @@ import { LoginComponent } from './login/login.component';
 import { MyHomeModule} from './myhome/myhome.module';
 
 import { NgbdModalComponent } from './sections/modal/modal.component';
+import { RicercaComponent } from './ricerca/ricerca.component';
+import { RigaComponent } from './ricerca/riga/riga.component';
+import { ModaleComponent } from './ricerca/modale/modale.component';
+import {SectionsModule} from './sections/sections.module';
+
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -28,16 +34,21 @@ import { NgbdModalComponent } from './sections/modal/modal.component';
     NavbarComponent,
     FooterComponent,
     LoginComponent,
+    RicercaComponent,
+    RigaComponent,
+    ModaleComponent,
   ],
-  imports: [
-    BrowserModule,
-    NgbModule,
-    FormsModule,
-    RouterModule,
-    AppRoutingModule,
-    HomeModule,
-    MyHomeModule,
-  ],
+    imports: [
+        BrowserModule,
+        NgbModule,
+        FormsModule,
+        RouterModule,
+        AppRoutingModule,
+        HomeModule,
+        MyHomeModule,
+        SectionsModule,
+        ReactiveFormsModule,
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
