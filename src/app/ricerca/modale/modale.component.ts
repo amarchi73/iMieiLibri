@@ -9,16 +9,16 @@ import { FormBuilder, FormGroup , Validators , FormControl } from '@angular/form
 })
 export class ModaleComponent implements OnInit {
   @Input() name;
-  nomeValore = new FormControl('ciao');
+  nomeValore = new FormControl();
 
 
   constructor(public activeModal: NgbActiveModal) {}
 
   ngOnInit(): void {
-    this.nomeValore.value=this.name.title;
+    this.nomeValore.setValue(this.name.title);
   }
 
   onChange() {
-    this.name.title=this.nomeValore.value;
+    this.name.title = this.nomeValore.value;
   }
 }

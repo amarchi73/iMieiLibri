@@ -7,11 +7,11 @@
 <div class="modal-body">
     <p>modale works!</p>
     {{name.title}}
-    <input [value]="name.title" (change)="onChange()"><br />
+    <input [ngModel]="name.title" (ngModelChange)="name.title = $event"><br />
     <textarea [value]="name.title"></textarea><br />
     <label>
         Name:
-        <input type="text" [formControl]="nomeValore" (change)="onChange()">
+        <input type="text" [formControl]="nomeValore" (change)="onChange()" [value]="name.title">
     </label>
     Value: {{ nomeValore.value }}
 </div>
