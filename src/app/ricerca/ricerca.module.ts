@@ -6,7 +6,6 @@ import { NgbdModalComponent} from '../sections/modal/modal.component';
 import { ModaleComponent } from './modale/modale.component';
 import {ReactiveFormsModule} from '@angular/forms';
 
-
 @NgModule({
   declarations: [ModaleComponent],
   imports: [

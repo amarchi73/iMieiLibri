@@ -11,7 +11,7 @@ import { NgbdModalComponent} from '../../sections/modal/modal.component';
 export class RigaComponent implements OnInit {
   @Input() libri;
   @Input() modale;
-
+  @Output() salva = new EventEmitter<any>();
 
   constructor() { }
 
@@ -23,6 +23,10 @@ export class RigaComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  onSalva(n) {
+    this.salva.emit(n);
   }
 
 }

@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup , Validators , FormControl } from '@angular/forms';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-modale',
@@ -10,7 +11,7 @@ import { FormBuilder, FormGroup , Validators , FormControl } from '@angular/form
 export class ModaleComponent implements OnInit {
   @Input() name;
   nomeValore = new FormControl();
-
+  @Output() salva = new EventEmitter<any>();
 
   constructor(public activeModal: NgbActiveModal) {}
 
@@ -20,5 +21,9 @@ export class ModaleComponent implements OnInit {
 
   onChange() {
     this.name.title = this.nomeValore.value;
+  }
+
+  setData(){
+    this.salva.emit(this.name.title);
   }
 }

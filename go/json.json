@@ -1,0 +1,6 @@
+[{ "title": "primo libro", "desc": "Ciao da GO", "img": "https://picsum.photos/300/300?1" },
+{ "title": "secondo libro", "desc": "descrizione 2", "img": "https://picsum.photos/300/300?2" },
+{ "title": "terzo libro", "desc": "descrizione 2", "img": "https://picsum.photos/300/300?3" },
+{ "title": "primo libro", "desc": "descrizione 1", "img": "https://picsum.photos/300/300?4" },
+{ "title": "secondo libro", "desc": "descrizione 2", "img": "https://picsum.photos/300/300?5" },
+{ "title": "terzo libro", "desc": "descrizione 2", "img": "https://picsum.photos/300/300?6" }]

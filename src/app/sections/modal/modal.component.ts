@@ -66,11 +66,11 @@ export class NgbdModalComponent {
     @Output() notify = new EventEmitter();
     @Input() modale;
     @Input() valore;
-    @Output() xclick=new EventEmitter();
+    @Output() xclick = new EventEmitter<any>();
     constructor(private modalService: NgbModal) {}
     open() {
-        this.xclick.emit();
         const modalRef = this.modalService.open(this.modale); //NgbdModalContentHaha);
         modalRef.componentInstance.name = this.valore;
+        modalRef.componentInstance.salva = this.xclick;
     }
 }
