@@ -16,14 +16,15 @@ export class ModaleComponent implements OnInit {
   constructor(public activeModal: NgbActiveModal) {}
 
   ngOnInit(): void {
-    this.nomeValore.setValue(this.name.title);
+    //this.nomeValore.setValue(this.name.title);
   }
 
   onChange() {
-    this.name.title = this.nomeValore.value;
+    //this.name.title = this.nomeValore.value;
   }
 
   setData(){
-    this.salva.emit(this.name.title);
+    alert("ok");
+    this.salva.emit(this.name.Titolo);
   }
 }

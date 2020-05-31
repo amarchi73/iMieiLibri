@@ -5,17 +5,25 @@
     </button>
 </div>
 <div class="modal-body">
-    <p>modale works!</p>
-    {{name.title}}
-    <input [ngModel]="name.title" (ngModelChange)="name.title = $event"><br />
-    <textarea [value]="name.title"></textarea><br />
+    <p>modale works!xxx</p>
+    {{name}}
     <label>
-        Name:
-        <input type="text" [formControl]="nomeValore" (change)="onChange()" [value]="name.title">
+        Titolo:
+        <input [ngModel]="name.Titolo" (ngModelChange)="name.Titolo = $event">
+        <!-- input type="text" [formControl]="nomeValore" (change)="onChange()" [value]="name.title" -->
     </label>
-    Value: {{ nomeValore.value }}
+    <label>
+        Autore:
+        <input [ngModel]="name.Autore" (ngModelChange)="name.Autore = $event">
+        <!-- input type="text" [formControl]="nomeValore" (change)="onChange()" [value]="name.title" -->
+    </label>
+    <label>
+        Descrizione
+        <textarea [ngModel]="name.Desc" (ngModelChange)="name.Desc = $event"></textarea><br />
+    </label>
 
-    <button type="button" class="btn btn-default btn-link" (click)="setData()">Never mind</button>
+
+    <button type="button" class="btn btn-default btn-link" (click)="setData()">Salva</button>
 </div>
 <div class="modal-footer">
     <div class="left-side">

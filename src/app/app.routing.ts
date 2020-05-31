@@ -19,7 +19,7 @@ const routes: Routes =[
     { path: 'login',          component: LoginComponent },
     { path: 'myhome',          component: MyhomeComponent },
     { path: 'ricerca',          component: RicercaComponent },
-    { path: '', redirectTo: 'home', pathMatch: 'full' }
+    { path: '', redirectTo: 'myhome', pathMatch: 'full' }
 ];
 
 @NgModule({
