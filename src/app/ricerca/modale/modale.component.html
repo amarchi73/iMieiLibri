@@ -5,21 +5,21 @@
     </button>
 </div>
 <div class="modal-body">
-    <p>modale works!xxx</p>
+    <p>modale works!aaa</p>
     {{name}}
     <label>
         Titolo:
-        <input [ngModel]="name.Titolo" (ngModelChange)="name.Titolo = $event">
+        <input [ngModel]="formval.Titolo" (ngModelChange)="formval.Titolo = $event">
         <!-- input type="text" [formControl]="nomeValore" (change)="onChange()" [value]="name.title" -->
     </label>
     <label>
         Autore:
-        <input [ngModel]="name.Autore" (ngModelChange)="name.Autore = $event">
+        <input [ngModel]="formval.Autore" (ngModelChange)="formval.Autore = $event">
         <!-- input type="text" [formControl]="nomeValore" (change)="onChange()" [value]="name.title" -->
     </label>
     <label>
         Descrizione
-        <textarea [ngModel]="name.Desc" (ngModelChange)="name.Desc = $event"></textarea><br />
+        <textarea [ngModel]="formval.Desc" (ngModelChange)="formval.Desc = $event"></textarea><br />
     </label>
 
 

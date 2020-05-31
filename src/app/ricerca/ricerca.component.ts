@@ -34,9 +34,36 @@ export class RicercaComponent implements OnInit {
         'Content-Type':  'multipart/form-data; boundary=---WebKitFormBoundary7MA4YWxkTrZu0gW',
       })
     };
-    const formData = new FormData();
+
+    /*
+     var jsonData = {
+   name: 'starwars',
+   year: 1977,
+   data: [{
+    'id': 'c5f6d301-328e-4167-8e13-504afb9a030e',
+    'item': 'bc4db36e-9e7c-478d-93a2-d4be32dacec1',
+    'qty': '1'
+  },
+  {
+    'id': 'c5f6d301-328e-4167-8e13-504afb9a030e',
+    'item': 'bc4db36e-9e7c-478d-93a2-d4be32dacec1',
+    'qty': '1'
+  },
+ ],
+};
+var formData = new FormData();
+Object.keys(jsonData).forEach((key)=>{formData.append(key,jsonData[key])});
     formData.append('uno', n);
     formData.append('due', "due");
+
+     */
+
+    var formData = new FormData();
+    Object.keys(n).forEach(
+        (key) => {
+          formData.append(key, n[key]);
+        }
+    );
 
     var ok = this.httpBoh.post<any>('http://localhost:8080/libriset', formData).subscribe(
         (res) => window.console.log(res),

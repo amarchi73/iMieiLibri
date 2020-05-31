@@ -10,12 +10,14 @@ import { Output, EventEmitter } from '@angular/core';
 })
 export class ModaleComponent implements OnInit {
   @Input() name;
+  formval: any;
   nomeValore = new FormControl();
   @Output() salva = new EventEmitter<any>();
 
   constructor(public activeModal: NgbActiveModal) {}
 
   ngOnInit(): void {
+    this.formval=this.name;
     //this.nomeValore.setValue(this.name.title);
   }
 
@@ -25,6 +27,6 @@ export class ModaleComponent implements OnInit {
 
   setData(){
     alert("ok");
-    this.salva.emit(this.name.Titolo);
+    this.salva.emit(this.formval);
   }
 }
