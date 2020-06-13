@@ -12,6 +12,12 @@ import (
 	"net/http"
 )
 
+
+/*
+** JSON In https://blog.golang.org/json
+** data da http in https://medium.com/@masnun/making-http-requests-in-golang-dd123379efe7
+*/
+
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:    4096,
 	WriteBufferSize:   4096,
