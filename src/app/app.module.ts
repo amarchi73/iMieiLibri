@@ -25,6 +25,7 @@ import {SectionsModule} from './sections/sections.module';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import {ZXingScannerModule} from '@zxing/ngx-scanner';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,8 @@ import { HttpClientModule } from '@angular/common/http';
         SectionsModule,
         ReactiveFormsModule,
         HttpClientModule,
+        ZXingScannerModule,
+
     ],
   providers: [],
   bootstrap: [AppComponent]

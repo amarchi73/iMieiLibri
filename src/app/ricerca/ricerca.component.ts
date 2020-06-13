@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
+import { BarcodeFormat } from '@zxing/library';
 
 @Component({
   selector: 'app-ricerca',
@@ -17,15 +18,40 @@ export class RicercaComponent implements OnInit {
   elencoLibri: any; // = myLibri;
   modaleComp = ModaleComponent;
   navItems: any;
+  barcode: any;
+  scanActive = false;
 
+  formatsEnabled: BarcodeFormat[] = [
+    BarcodeFormat.CODE_128,
+    BarcodeFormat.DATA_MATRIX,
+    BarcodeFormat.EAN_13,
+    BarcodeFormat.QR_CODE,
+  ];
   constructor( private httpBoh:  HttpClient ) { }
 
   ngOnInit(): void {
     console.log('caricati?');
-    this.httpBoh.get('http://localhost:8080/libri').subscribe(data => {
+    /*this.httpBoh.get('http://localhost:8080/libri').subscribe(data => {
       //window.alert(data[0]['title']);
       this.elencoLibri = data;
-    });
+    });*/
+    this.barcode = "barcoode";
+  }
+
+  toggleScan() {
+    this.scanActive = !this.scanActive;
+  }
+
+  scanSuccessHandler(e: string) {
+    this.barcode = e;
+    console.log("arrivato");
+  }
+
+  scanErrorHandler(event){
+    console.log(event);
+  }
+  scanFailureHandler(event){
+    console.log(event);
   }
 
   setData(n){
