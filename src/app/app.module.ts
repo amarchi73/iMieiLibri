@@ -25,6 +25,7 @@ import {SectionsModule} from './sections/sections.module';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import {ZXingScannerModule} from '@zxing/ngx-scanner';
 import {RicercaModule} from './ricerca/ricerca.module';
 
 @NgModule({
@@ -51,6 +52,8 @@ import {RicercaModule} from './ricerca/ricerca.module';
         SectionsModule,
         ReactiveFormsModule,
         HttpClientModule,
+        ZXingScannerModule,
+
         RicercaModule,
     ],
   providers: [],
