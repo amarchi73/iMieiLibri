@@ -25,6 +25,7 @@ import {SectionsModule} from './sections/sections.module';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import {RicercaModule} from './ricerca/ricerca.module';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { HttpClientModule } from '@angular/common/http';
         SectionsModule,
         ReactiveFormsModule,
         HttpClientModule,
+        RicercaModule,
     ],
   providers: [],
   bootstrap: [AppComponent]

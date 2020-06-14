@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
+import { ContenitoreComponent} from './contenitore/contenitore.component';
 
 @Component({
   selector: 'app-ricerca',
@@ -17,6 +18,7 @@ export class RicercaComponent implements OnInit {
   elencoLibri: any; // = myLibri;
   modaleComp = ModaleComponent;
   navItems: any;
+  message = 'ciao a tutti';
 
   constructor( private httpBoh:  HttpClient ) { }
 
