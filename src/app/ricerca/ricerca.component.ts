@@ -27,6 +27,7 @@ export class RicercaComponent implements OnInit {
     BarcodeFormat.CODE_128,
     BarcodeFormat.DATA_MATRIX,
     BarcodeFormat.EAN_13,
+    BarcodeFormat.EAN_8,
     BarcodeFormat.QR_CODE,
   ];
   constructor( private httpBoh:  HttpClient ) { }
