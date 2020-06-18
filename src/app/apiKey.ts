@@ -1,6 +1,6 @@
 export const apiKey = [{
     name: 'google',
-    chiave:  ''
+    chiave:  'API KEY GOOGLE BOOKS'
 }];
 
 export const myLibri = [

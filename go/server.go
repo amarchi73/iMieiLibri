@@ -37,6 +37,14 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "<form action='/adler' method='POST'><input type='text' name='testo' value=''><input type='submit' name='invio' value='invia'></form>")
 }
 
+func handlerIban(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	t1 := r.FormValue("codice")
+	fmt.Println("Valore: ", t1)
+	params := r.PostFormValue("codice") // to get params value with key
+	fmt.Println("altro: ", params)
+}
+
 func handlerAdler(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseMultipartForm(0)
@@ -109,6 +117,13 @@ type riga struct {
 
 var db *sql.DB
 
+/*
+https://github.com/gorilla/websocket/blob/master/examples/echo/server.go
+https://tutorialedge.net/typescript/angular/angular-websockets-tutorial/
+
+https://www.googleapis.com/books/v1/volumes/i8_XngEACAAJ
+https://www.googleapis.com/books/v1/volumes?q=isbn:9788815247902
+ */
 func main() {
 	var err error
 	db, err = sql.Open("sqlite3","go/mieilibri.sqlite")
@@ -119,5 +134,6 @@ func main() {
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/libriset", handlerAdler)
 	http.HandleFunc("/libri", handlerLibri)
+	http.HandleFunc("/iban", handlerIban)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

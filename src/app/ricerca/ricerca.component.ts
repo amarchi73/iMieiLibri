@@ -34,6 +34,12 @@ export class RicercaComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('caricati?');
+
+    this.httpBoh.get('https://www.googleapis.com/books/v1/volumes?q=isbn:9788815247902').subscribe(data => {
+      //window.alert(data[0]['title']);
+      console.log(data);
+    });
+
     this.httpBoh.get('http://localhost:8080/libri').subscribe(data => {
       //window.alert(data[0]['title']);
       this.elencoLibri = data;
