@@ -9,11 +9,14 @@ import { catchError, retry } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
 import { BarcodeFormat } from '@zxing/library';
 import { ContenitoreComponent} from './contenitore/contenitore.component';
+import {WebsocketService} from '../websocket.service';
+import {GochatService} from '../gochat.service';
 
 @Component({
   selector: 'app-ricerca',
   templateUrl: './ricerca.component.html',
-  styleUrls: ['./ricerca.component.css']
+  styleUrls: ['./ricerca.component.css'],
+  providers: [WebsocketService, GochatService]
 })
 export class RicercaComponent implements OnInit {
   elencoLibri: any; // = myLibri;
@@ -22,6 +25,7 @@ export class RicercaComponent implements OnInit {
   barcode: any;
   scanActive = false;
   message = 'ciao a tutti';
+  conta = 1;
 
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.CODE_128,
@@ -30,7 +34,12 @@ export class RicercaComponent implements OnInit {
     BarcodeFormat.EAN_8,
     BarcodeFormat.QR_CODE,
   ];
-  constructor( private httpBoh:  HttpClient ) { }
+  constructor( private httpBoh:  HttpClient, private chatService: GochatService ) {
+    chatService.messages.subscribe(msg => {
+      console.log("Response from websocket: ");
+      console.log(msg);
+    });
+  }
 
   ngOnInit(): void {
     console.log('caricati?');
@@ -45,6 +54,18 @@ export class RicercaComponent implements OnInit {
       this.elencoLibri = data;
     });
     this.barcode = "barcoode";
+  }
+
+  private messageFunc = {
+    author: "tutorialedge",
+    message: "this is a test message"
+  };
+
+  sendMsg() {
+    console.log("new message from client to websocket: ", this.message);
+    this.chatService.messages.next(this.messageFunc);
+    this.conta++;
+    this.messageFunc.message = "ciao "+this.conta;
   }
 
   toggleScan() {
