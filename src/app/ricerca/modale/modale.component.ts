@@ -26,7 +26,6 @@ export class ModaleComponent implements OnInit {
   }
 
   setData(){
-    alert("ok");
     this.salva.emit(this.formval);
   }
 }

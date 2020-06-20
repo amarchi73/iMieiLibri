@@ -67,6 +67,9 @@ export class NgbdModalComponent {
     @Input() modale;
     @Input() valore;
     @Output() xclick = new EventEmitter<any>();
+    @Input() label="Apri";
+    @Input() classi="btn btn-danger";
+
     constructor(private modalService: NgbModal) {}
     open() {
         const modalRef = this.modalService.open(this.modale); //NgbdModalContentHaha);

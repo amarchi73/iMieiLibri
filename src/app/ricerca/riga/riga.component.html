@@ -23,7 +23,7 @@
                 <img [src]="l.Img">
             </div>
             <div class="col-lg-8">
-                <h6 class="text-primary text-uppercase">{{l.Titolo}}</h6>
+                <h6 class="text-primary text-uppercase">{{l.id}} {{l.Titolo}}</h6>
                 <i>{{l.Autore}}</i>
                 <p class="description mt-3">{{l.Desc}}</p>
                 Isbn: <b>{{l.Isbn}}</b><br />
@@ -33,6 +33,8 @@
                 <button class="btn btn-success" (click)="onSalvaLibro(l)">Salva</button><br />
                 <br />
                 <button class="btn btn-warning" (click)="onEliminaLibro(l)">Elimina</button><br />
+                <br />
+                <app-modal-component [modale]="modale" [valore]="l" (xclick)="onSalvaLibro($event)" [label]="'Modifica'" [classi]="'btn btn-primary'"></app-modal-component>
             </div>
         </div>
     </div>

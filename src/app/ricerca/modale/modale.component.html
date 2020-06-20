@@ -1,36 +1,44 @@
 <div class="modal-header">
-    <h5 class="modal-title text-center">Modal title xxxxxxxxxx</h5>
+    <h5 class="modal-title text-center">Modifica libro</h5>
     <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
 <div class="modal-body">
-    <p>modale works!aaa</p>
-    {{name}}
-    <label>
-        Titolo:
-        <input [ngModel]="formval.Titolo" (ngModelChange)="formval.Titolo = $event">
-        <!-- input type="text" [formControl]="nomeValore" (change)="onChange()" [value]="name.title" -->
-    </label>
-    <label>
-        Autore:
-        <input [ngModel]="formval.Autore" (ngModelChange)="formval.Autore = $event">
-        <!-- input type="text" [formControl]="nomeValore" (change)="onChange()" [value]="name.title" -->
-    </label>
-    <label>
-        Descrizione
-        <textarea [ngModel]="formval.Desc" (ngModelChange)="formval.Desc = $event"></textarea><br />
-    </label>
-
-
-    <button type="button" class="btn btn-default btn-link" (click)="setData()">Salva</button>
+    <div class="form-group">
+        <label>Img:</label>{{name.Id}}
+        <input [ngModel]="formval.Img" (ngModelChange)="formval.Img = $event" class="form-control">
+    </div>
+    <div class="form-group">
+        <label>Titolo:</label>
+        <input [ngModel]="formval.Titolo" (ngModelChange)="formval.Titolo = $event" class="form-control">
+    </div>
+    <div class="form-group">
+        <label>Autore:</label>
+        <input [ngModel]="formval.Autore" (ngModelChange)="formval.Autore = $event" class="form-control">
+    </div>
+    <div class="form-group">
+        <label>Descrizione:</label>
+        <textarea [ngModel]="formval.Desc" (ngModelChange)="formval.Desc = $event" class="form-control"></textarea><br />
+    </div>
+    <div class="form-group">
+        <label>Isbn:</label>
+        <input [ngModel]="formval.Isbn" (ngModelChange)="formval.Isbn = $event" class="form-control">
+    </div>
+    <div class="form-group">
+        <label>Categorie:</label>
+        <textarea [ngModel]="formval.Categorie" (ngModelChange)="formval.Categorie = $event" class="form-control"></textarea><br />
+    </div>
+    <div class="form-group">
+        <button type="button" class="btn btn-default" (click)="setData()">Salva</button>
+    </div>
 </div>
 <div class="modal-footer">
     <div class="left-side">
-        <button type="button" class="btn btn-default btn-link" (click)="activeModal.close('Close click')">Never mind</button>
+        <button type="button" class="btn btn-default" (click)="activeModal.close('Close click')">Never mind</button>
     </div>
     <div class="divider"></div>
     <div class="right-side">
-        <button type="button" class="btn btn-danger btn-link" (click)="activeModal.close('Close click')">DELETE</button>
+        <button type="button" class="btn btn-danger" (click)="activeModal.close('Close click')">DELETE</button>
     </div>
 </div>

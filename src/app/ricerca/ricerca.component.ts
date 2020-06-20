@@ -9,14 +9,13 @@ import { catchError, retry } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
 import { BarcodeFormat } from '@zxing/library';
 import { ContenitoreComponent} from './contenitore/contenitore.component';
-import {WebsocketService} from '../websocket.service';
-import {GochatService} from '../gochat.service';
+
 
 @Component({
   selector: 'app-ricerca',
   templateUrl: './ricerca.component.html',
   styleUrls: ['./ricerca.component.css'],
-  providers: [WebsocketService, GochatService]
+
 })
 export class RicercaComponent implements OnInit {
   elencoLibri: any; // = myLibri;
@@ -36,35 +35,8 @@ export class RicercaComponent implements OnInit {
     BarcodeFormat.EAN_8,
     BarcodeFormat.QR_CODE,
   ];
-  constructor( private httpBoh:  HttpClient, private chatService: GochatService ) {
-    chatService.messages.subscribe(msg => {
-      console.log("Response from websocket: ");
-      console.log(msg);
-      if(this.scansione==0) {
-        this.elencoLibri=[];
-        this.scansioni=[];
-      }
-      this.scansione = 1;
-      this.httpBoh.get('https://www.googleapis.com/books/v1/volumes?q=isbn:'+msg).subscribe(data => {
-        for (var i = 0; i < data["items"].length; i++) {
-          var curLibro=data["items"][i];
-          this.httpBoh.get('https://www.googleapis.com/books/v1/volumes/' + curLibro.id).subscribe(dataDesc => {
-            console.log(dataDesc);
-            var dd = {
-              "Id": 0,
-              "Titolo": curLibro.volumeInfo.title,
-              "Autore": curLibro.volumeInfo.authors.join(),
-              "Desc": dataDesc["volumeInfo"].description,
-              "Img": curLibro.volumeInfo.imageLinks.thumbnail,
-              "Isbn": msg,
-              "Categorie": dataDesc["volumeInfo"].categories.join(),
-            };
-            this.scansioni[this.scansioni.length] = dd;
+  constructor( private httpBoh:  HttpClient) {
 
-          });
-        }
-      });
-    });
   }
 
   ngOnInit(): void {
@@ -80,18 +52,6 @@ export class RicercaComponent implements OnInit {
       this.elencoLibri = data;
     });
     this.barcode = "barcoode";
-  }
-
-  private messageFunc = {
-    author: "tutorialedge",
-    message: "this is a test message"
-  };
-
-  sendMsg() {
-    console.log("new message from client to websocket: ", this.message);
-    this.chatService.messages.next(this.messageFunc);
-    this.conta++;
-    this.messageFunc.message = "ciao "+this.conta;
   }
 
   toggleScan() {

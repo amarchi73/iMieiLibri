@@ -27,6 +27,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {ZXingScannerModule} from '@zxing/ngx-scanner';
 import {RicercaModule} from './ricerca/ricerca.module';
+import { InserimentoComponent } from './inserimento/inserimento.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import {RicercaModule} from './ricerca/ricerca.module';
     RicercaComponent,
     RigaComponent,
     ModaleComponent,
+    InserimentoComponent,
   ],
     imports: [
         BrowserModule,

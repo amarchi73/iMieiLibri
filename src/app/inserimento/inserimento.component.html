@@ -44,54 +44,25 @@
         </section>
         <!-- 1st Hero Variation -->
     </div>
-    <section class="section section-lg pt-lg-0 mt--200">
+    <section class="pt-lg-0 mt--200">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-12">
                     <div class="row row-grid">
-                        <div class="col-lg-4">
+                        <div class="col-lg-12">
                             <div class="card card-lift--hover shadow border-0">
                                 <div class="card-body py-5">
                                     <div class="icon icon-shape icon-shape-primary rounded-circle mb-4">
                                         <i class="ni ni-check-bold"></i>
                                     </div>
-                                    <h6 class="text-primary text-uppercase">Catalogo</h6>
-                                    <p class="description mt-3">Qui ci mettiamo la ricerca dei libri</p>
+                                    <h6 class="text-primary text-uppercase">Inserimento libri</h6>
+                                    <p class="description mt-3">Form di inserimento</p>
                                     <div>
                                         <span class="badge badge-pill badge-primary">Scorciatoia 1</span>
                                         <span class="badge badge-pill badge-primary">Scorciatoia 2</span>
                                         <span class="badge badge-pill badge-primary">Scorciatoia 3</span>
                                     </div>
-                                    <a href="/#/ricerca" class="btn btn-primary mt-4">Vai</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="card card-lift--hover shadow border-0">
-                                <div class="card-body py-5">
-                                    <div class="icon icon-shape icon-shape-success rounded-circle mb-4">
-                                        <i class="ni ni-istanbul"></i>
-                                    </div>
-                                    <h6 class="text-success text-uppercase">Inserimento libri</h6>
-                                    <p class="description mt-3">Aggiunta di libri.</p>
-                                    <div>
-                                        <!-- span class="badge badge-pill badge-success">business</span>
-                                        <span class="badge badge-pill badge-success">vision</span>
-                                        <span class="badge badge-pill badge-success">success</span -->
-                                    </div>
-                                    <a  [routerLink]="['/inserimento']" class="btn btn-success mt-4">Vai</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="card card-lift--hover shadow border-0">
-                                <div class="card-body py-5">
-                                    <div class="icon icon-shape icon-shape-warning rounded-circle mb-4">
-                                        <i class="ni ni-planet"></i>
-                                    </div>
-                                    <h6 class="text-warning text-uppercase">Impostazioni</h6>
-                                    <p class="description mt-3"></p>
-                                    <a href="javascript:void(0)" class="btn btn-warning mt-4">Vai</a>
+                                    <a href="javascript:void(0)" class="btn btn-primary mt-4">Vai</a>
                                 </div>
                             </div>
                         </div>
@@ -100,19 +71,17 @@
             </div>
         </div>
     </section>
-    <section class="section section-lg">
+
+    <section>
         <div class="container">
             <div class="row row-grid align-items-center">
                 <div class="col-md-12 order-md-1">
-                    <p>myhome works!</p>
-                    --{{apikey}}
-                    --
-                    <app-modal-component></app-modal-component>
-                    --
+                    <app-riga [libri]="elencoLibri" [modale]="modaleComp" (salvaLibro)="salvaLibro($event)" [scansioni]="scansioni"></app-riga>
                 </div>
             </div>
         </div>
     </section>
+
 </main>
 
 

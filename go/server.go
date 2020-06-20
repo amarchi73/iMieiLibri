@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 
@@ -43,7 +44,6 @@ func handlerIban(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Valore: ", t1)
 	params := r.PostFormValue("codice") // to get params value with key
 
-
 	/*ww, err := conn.NextWriter(websocket.TextMessage)
 	if err != nil {
 		return
@@ -56,31 +56,71 @@ func handlerIban(w http.ResponseWriter, r *http.Request) {
 
 	}
 	fmt.Println("inviato? ", params)
+
+	q := "INSERT INTO libri(titolo,descrizione,copertina,Autore,isbn) VALUES('','','','','"+params+"')"
+	_, errdb := db.Exec(q)
+	fmt.Println(errdb)
 }
 
-func handlerAdler(w http.ResponseWriter, r *http.Request) {
+func handlerLibriSet(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseMultipartForm(0)
 
-	t1 := r.FormValue("id")
-	t2 := r.FormValue("Titolo")
-	t3 := r.FormValue("Desc")
-	fmt.Println("id", t1)
+	id := r.FormValue("Id")
+	titolo := r.FormValue("Titolo")
+	desc := r.FormValue("Desc")
+	autore := r.FormValue("Autore")
+	img := r.FormValue("Img")
+	isbn := r.FormValue("Isbn")
+	// categorie := r.FormValue("Categorie")
+
+	var err error;
+	if id!="0" {
+		_, err = db.Exec("UPDATE libri SET titolo=$1, descrizione=$2, copertina=$3, Autore=$4, isbn=$5 WHERE id=$6", titolo, desc, img, autore, isbn, id);
+	}else{
+		res, err1 := db.Exec("INSERT INTO libri(titolo,descrizione,copertina,Autore,isbn) VALUES($1,$2,$3,$4,$5)", titolo, desc, img, autore, isbn);
+		err=err1
+		idd, _ := res.LastInsertId();
+		fmt.Println("idd: ", idd, err)
+		id = strconv.FormatInt(idd,10)
+	}
+	fmt.Println("err: ", err)
+	fmt.Println("id: ", id, isbn)
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	fmt.Fprintf(w, id)
+
+	/* fmt.Println("id", t1)
 	fmt.Println("titolo", t2)
 	fmt.Println("descrizione", t3)
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "*")
-	fmt.Fprintf(w, "Ciao Adler %s!", "aa")
-
+	fmt.Fprintf(w, "Ciao Adler %s!", "aa") */
 }
 
+
+
 func handlerLibri(w http.ResponseWriter, r *http.Request){
+	r.ParseForm()
+	quali := r.FormValue("quali")
+	fmt.Println("quali=",quali)
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if(1==0) {
 		js, _ := ioutil.ReadFile("go/json.json")
 		fmt.Fprintf(w, "%s", js)
-	}else {
-		righe := elencoLibri()
+	}else if quali=="vuoti" {
+		righe := elencoLibri(quali)
+		fmt.Fprintf(w, "[")
+		for i := 0; i < len(righe); i++ {
+			if(i>0){
+				fmt.Fprintf(w,",")
+			}
+			jsn, _ := json.Marshal(righe[i])
+			fmt.Fprintf(w, "%s", jsn)
+		}
+		fmt.Fprintf(w, "]")
+	}else{
+		righe := elencoLibri(quali)
 		fmt.Fprintf(w, "[")
 		for i := 0; i < len(righe); i++ {
 			if(i>0){
@@ -112,30 +152,38 @@ func handlerWS(w http.ResponseWriter, r *http.Request){
 
 	}
 }
+func salvaLibro(){
 
-func elencoLibri() map[int]riga{
+}
+func elencoLibri(quali string) map[int]riga{
 
 	righe:= make(map[int]riga)
 	var (
 		id int
 		t string
 		a string
+		isbn string
 	)
-	r, err := db.Query(   `SELECT titolo, Autore, id FROM libri`)
+	q := "SELECT id, titolo, Autore, isbn FROM libri WHERE 1=1"
+	if quali=="vuoti"{
+		q = q + " AND titolo = ''"
+	}
+	fmt.Println(q)
+	r, err := db.Query( q )
 	fmt.Println(err)
 	i:=0
 	var rr riga
 
 	for r.Next() {
-		r.Scan(&t, &a, &id)
+		r.Scan(&id, &t, &a, &isbn)
 		rr.Titolo=t
 		rr.Autore=a
 		rr.Id=id
 		rr.Img="https://picsum.photos/300/300?"+fmt.Sprintf("%s",i)
+		rr.Isbn=isbn
+		fmt.Println(isbn)
 		righe[i]=rr
-
-
-		//fmt.Println(righe[i])
+		fmt.Println(righe[i])
 		i++
 	}
 	return righe
@@ -148,6 +196,7 @@ type riga struct {
 	Autore string
 	Desc string
 	Img string
+	Isbn string
 }
 
 var db *sql.DB
@@ -167,7 +216,7 @@ func main() {
 
 	fmt.Println("ciao!!!!")
 	http.HandleFunc("/", handler)
-	http.HandleFunc("/libriset", handlerAdler)
+	http.HandleFunc("/libriset", handlerLibriSet)
 	http.HandleFunc("/libri", handlerLibri)
 	http.HandleFunc("/iban", handlerIban)
 	http.HandleFunc("/ws", handlerWS)

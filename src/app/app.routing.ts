@@ -10,6 +10,7 @@ import { LandingComponent } from './landing/landing.component';
 import { LoginComponent } from './login/login.component';
 import { MyhomeComponent } from './myhome/myhome.component';
 import { RicercaComponent } from './ricerca/ricerca.component';
+import { InserimentoComponent} from './inserimento/inserimento.component';
 
 const routes: Routes =[
     { path: 'home',             component: HomeComponent },
@@ -19,6 +20,7 @@ const routes: Routes =[
     { path: 'login',          component: LoginComponent },
     { path: 'myhome',          component: MyhomeComponent },
     { path: 'ricerca',          component: RicercaComponent },
+    { path: 'inserimento',          component: InserimentoComponent },
     { path: '', redirectTo: 'myhome', pathMatch: 'full' }
 ];
 
