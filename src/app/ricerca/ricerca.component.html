@@ -96,7 +96,7 @@
         <div class="container">
             <div class="row row-grid align-items-center">
                 <div class="col-md-12 order-md-1">
-                    <app-riga [libri]="elencoLibri" [modale]="modaleComp" (salva)="setData($event)">
+                    <app-riga [libri]="elencoLibri" [modale]="modaleComp" (salva)="setData($event)" (salvaLibro)="salvaLibro($event)" [scansioni]="scansioni">
                     </app-riga>
                     <app-contenitore (emetti)="setData()" [inval]="elencoLibri">
                         <ng-container class="ciabelli">ciao belli </ng-container>

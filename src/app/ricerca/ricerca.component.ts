@@ -20,12 +20,14 @@ import {GochatService} from '../gochat.service';
 })
 export class RicercaComponent implements OnInit {
   elencoLibri: any; // = myLibri;
+  scansioni: any;
   modaleComp = ModaleComponent;
   navItems: any;
   barcode: any;
   scanActive = false;
   message = 'ciao a tutti';
   conta = 1;
+  scansione = 0;
 
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.CODE_128,
@@ -38,6 +40,30 @@ export class RicercaComponent implements OnInit {
     chatService.messages.subscribe(msg => {
       console.log("Response from websocket: ");
       console.log(msg);
+      if(this.scansione==0) {
+        this.elencoLibri=[];
+        this.scansioni=[];
+      }
+      this.scansione = 1;
+      this.httpBoh.get('https://www.googleapis.com/books/v1/volumes?q=isbn:'+msg).subscribe(data => {
+        for (var i = 0; i < data["items"].length; i++) {
+          var curLibro=data["items"][i];
+          this.httpBoh.get('https://www.googleapis.com/books/v1/volumes/' + curLibro.id).subscribe(dataDesc => {
+            console.log(dataDesc);
+            var dd = {
+              "Id": 0,
+              "Titolo": curLibro.volumeInfo.title,
+              "Autore": curLibro.volumeInfo.authors.join(),
+              "Desc": dataDesc["volumeInfo"].description,
+              "Img": curLibro.volumeInfo.imageLinks.thumbnail,
+              "Isbn": msg,
+              "Categorie": dataDesc["volumeInfo"].categories.join(),
+            };
+            this.scansioni[this.scansioni.length] = dd;
+
+          });
+        }
+      });
     });
   }
 
@@ -82,6 +108,27 @@ export class RicercaComponent implements OnInit {
   }
   scanFailureHandler(event){
     console.log(event);
+  }
+
+  salvaLibro(l){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        /*'Content-Type':  'multipart/form-data; boundary=---WebKitFormBoundary7MA4YWxkTrZu0gW',*/
+        /* 'Content-Type':  'form-data', */
+      })
+    };
+    console.log(l);
+    var formData = new FormData();
+    Object.keys(l).forEach(
+        (key) => {
+          formData.append(key, l[key]);
+        }
+    );
+
+    var ok = this.httpBoh.post<any>('http://localhost:8080/libriset', formData).subscribe(
+        (res) => window.console.log(res),
+        (err) => window.console.log(err)
+    );
   }
 
   setData(n){

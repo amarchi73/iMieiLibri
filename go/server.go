@@ -42,17 +42,32 @@ func handlerIban(w http.ResponseWriter, r *http.Request) {
 	t1 := r.FormValue("codice")
 	fmt.Println("Valore: ", t1)
 	params := r.PostFormValue("codice") // to get params value with key
-	fmt.Println("altro: ", params)
+
+
+	/*ww, err := conn.NextWriter(websocket.TextMessage)
+	if err != nil {
+		return
+	}
+	ww.Write([]byte(params))
+	*/
+	err := conn.WriteMessage(websocket.TextMessage, []byte(params))
+	if err != nil {
+		log.Println("write:", err)
+
+	}
+	fmt.Println("inviato? ", params)
 }
 
 func handlerAdler(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseMultipartForm(0)
 
-	t1 := r.FormValue("uno")
-	t2 := r.FormValue("due")
-	fmt.Println("Errore", t1)
-	fmt.Println("Valore", t2)
+	t1 := r.FormValue("id")
+	t2 := r.FormValue("Titolo")
+	t3 := r.FormValue("Desc")
+	fmt.Println("id", t1)
+	fmt.Println("titolo", t2)
+	fmt.Println("descrizione", t3)
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	fmt.Fprintf(w, "Ciao Adler %s!", "aa")
@@ -75,6 +90,26 @@ func handlerLibri(w http.ResponseWriter, r *http.Request){
 			fmt.Fprintf(w, "%s", jsn)
 		}
 		fmt.Fprintf(w, "]")
+	}
+}
+
+var conn *websocket.Conn
+
+func handlerWS(w http.ResponseWriter, r *http.Request){
+	c, _ := upgrader.Upgrade(w, r, nil)
+	conn = c
+	fmt.Println("connessione ws")
+
+	mt, message, err := c.ReadMessage()
+	if err != nil {
+		log.Println("read:", err)
+
+	}
+	log.Printf("recv: %s", message)
+	err = c.WriteMessage(mt, message)
+	if err != nil {
+		log.Println("write:", err)
+
 	}
 }
 
@@ -135,5 +170,6 @@ func main() {
 	http.HandleFunc("/libriset", handlerAdler)
 	http.HandleFunc("/libri", handlerLibri)
 	http.HandleFunc("/iban", handlerIban)
+	http.HandleFunc("/ws", handlerWS)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

@@ -10,8 +10,10 @@ import { NgbdModalComponent} from '../../sections/modal/modal.component';
 })
 export class RigaComponent implements OnInit {
   @Input() libri;
+  @Input() scansioni;
   @Input() modale;
   @Output() salva = new EventEmitter<any>();
+  @Output() salvaLibro = new EventEmitter<any>();
 
   constructor() { }
 
@@ -29,4 +31,12 @@ export class RigaComponent implements OnInit {
     this.salva.emit(n);
   }
 
+  onSalvaLibro(l){
+    this.salvaLibro.emit(l);
+  }
+
+  onEliminaLibro(l){
+    var i=this.scansioni.indexOf(l);
+    this.scansioni.splice(i,1);
+  }
 }
