@@ -74,6 +74,8 @@ export class InserimentoComponent implements OnInit {
             "Img": curLibro.volumeInfo.imageLinks.thumbnail,
             "Isbn": msg,
             "Categorie": dataDesc["volumeInfo"].categories.join(','),
+
+            mostraAvviso: 0, // per gli alert di salvataggio
           };
           this.scansioni[this.scansioni.length] = dd;
 
@@ -104,11 +106,23 @@ export class InserimentoComponent implements OnInit {
         }
     );
     var ind=this.scansioni.indexOf(l);
-    alert(ind);
+    //alert(ind);
     var ok = this.httpBoh.post<any>('http://localhost:8080/libriset', formData).subscribe(
         (res) => {
           window.console.log(res);
-          this.scansioni[ind].Id=res;
+          //this.scansioni[ind].Id=res;
+          this.scansioni.splice(ind,1);
+        },
+        (err) => window.console.log(err)
+    );
+  }
+
+  eliminaLibro(l){
+    var okk=confirm("Eliminare "+l.titolo+"?");
+    if(!okk) return;
+    var ok = this.httpBoh.get<any>('http://localhost:8080/libriset?delID='+l.Id).subscribe(
+        (res) => {
+          window.console.log(res);
         },
         (err) => window.console.log(err)
     );

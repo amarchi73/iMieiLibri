@@ -66,6 +66,7 @@ func handlerLibriSet(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseMultipartForm(0)
 
+	delID := r.FormValue("delID")
 	id := r.FormValue("Id")
 	titolo := r.FormValue("Titolo")
 	desc := r.FormValue("Desc")
@@ -73,9 +74,15 @@ func handlerLibriSet(w http.ResponseWriter, r *http.Request) {
 	img := r.FormValue("Img")
 	isbn := r.FormValue("Isbn")
 	// categorie := r.FormValue("Categorie")
+	fmt.Println("delID: ", delID)
 
 	var err error;
-	if id!="0" {
+	if delID!=""{
+		_, err = db.Exec("DELETE FROM libri WHERE id=$1", delID)
+		id=delID
+		fmt.Println("cancellato ID: ", delID)
+
+	}else if id!="0" {
 		_, err = db.Exec("UPDATE libri SET titolo=$1, descrizione=$2, copertina=$3, Autore=$4, isbn=$5 WHERE id=$6", titolo, desc, img, autore, isbn, id);
 	}else{
 		res, err1 := db.Exec("INSERT INTO libri(titolo,descrizione,copertina,Autore,isbn) VALUES($1,$2,$3,$4,$5)", titolo, desc, img, autore, isbn);
@@ -163,8 +170,10 @@ func elencoLibri(quali string) map[int]riga{
 		t string
 		a string
 		isbn string
+		c string
+		d string
 	)
-	q := "SELECT id, titolo, Autore, isbn FROM libri WHERE 1=1"
+	q := "SELECT id, titolo, Autore, isbn, copertina, descrizione FROM libri WHERE 1=1"
 	if quali=="vuoti"{
 		q = q + " AND titolo = ''"
 	}
@@ -175,12 +184,13 @@ func elencoLibri(quali string) map[int]riga{
 	var rr riga
 
 	for r.Next() {
-		r.Scan(&id, &t, &a, &isbn)
+		r.Scan(&id, &t, &a, &isbn, &c, &d)
 		rr.Titolo=t
 		rr.Autore=a
 		rr.Id=id
-		rr.Img="https://picsum.photos/300/300?"+fmt.Sprintf("%s",i)
+		rr.Img=c
 		rr.Isbn=isbn
+		rr.Desc=d
 		fmt.Println(isbn)
 		righe[i]=rr
 		fmt.Println(righe[i])

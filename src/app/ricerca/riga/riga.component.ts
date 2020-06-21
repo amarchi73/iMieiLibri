@@ -14,6 +14,9 @@ export class RigaComponent implements OnInit {
   @Input() modale;
   @Output() salva = new EventEmitter<any>();
   @Output() salvaLibro = new EventEmitter<any>();
+  @Output() eliminaLibro  = new EventEmitter<any>();
+
+  alert = { mostra: 0, icon: 'ni ni-like-2', type: 'success', strong: 'OK', message: 'Salvato' };
 
   constructor() { }
 
@@ -33,10 +36,16 @@ export class RigaComponent implements OnInit {
 
   onSalvaLibro(l){
     this.salvaLibro.emit(l);
+    l.mostraAvviso=1;
   }
 
   onEliminaLibro(l){
     var i=this.scansioni.indexOf(l);
     this.scansioni.splice(i,1);
+    this.eliminaLibro.emit(l);
+  }
+
+  close(l){
+    l.mostraAvviso = 0;
   }
 }

@@ -1,16 +1,22 @@
 <div class="row row-grid">
-    <div class="col-lg-4" *ngFor="let l of libri">
-        <div class="card card-lift--hover shadow border-0">
-            <img [src]="l.Img">
-            <div class="card-body py-5">
-                <h6 class="text-primary text-uppercase">{{l.Titolo}}</h6>
+    <div class="col-lg-12" *ngFor="let l of libri">
+        <div class="row">
+            <div class="col-lg-2">
+                <img [src]="l.Img">
+            </div>
+            <div class="col-lg-8">
+                <h6 class="text-primary text-uppercase">{{l.id}} {{l.Titolo}}</h6>
+                <i>{{l.Autore}}</i>
                 <p class="description mt-3">{{l.Desc}}</p>
-                <div>
-
-                </div>
-                <a href="javascript:void(0)" class="btn btn-primary mt-4">Vai</a>
-
-                ###<app-modal-component [modale]="modale" [valore]="l" (xclick)="onSalva($event)"></app-modal-component>###
+                Isbn: <b>{{l.Isbn}}</b><br />
+                Categorie: <b>{{l.Categorie}}</b><br />
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-success" (click)="onSalvaLibro(l)">Salva</button><br />
+                <br />
+                <button class="btn btn-warning" (click)="onEliminaLibro(l)">Elimina</button><br />
+                <br />
+                <app-modal-component [modale]="modale" [valore]="l" (xclick)="onSalvaLibro($event)" [label]="'Modifica'" [classi]="'btn btn-primary'"></app-modal-component>
             </div>
         </div>
     </div>
@@ -30,6 +36,14 @@
                 Categorie: <b>{{l.Categorie}}</b><br />
             </div>
             <div class="col-lg-2">
+                <ngb-alert [type]="alert.type"  [dismissible]="true" *ngIf="l.mostraAvviso==1" (close)="close(l)" >
+                    <ng-container>
+                        <div class="alert-inner--icon">
+                            <i class="{{alert.icon}}"></i>
+                        </div>
+                    </ng-container>
+                    <span class="alert-inner--text">  --{{alert.mostra}}-- <strong>{{alert.strong}} </strong>{{ alert.message }}</span>
+                </ngb-alert>
                 <button class="btn btn-success" (click)="onSalvaLibro(l)">Salva</button><br />
                 <br />
                 <button class="btn btn-warning" (click)="onEliminaLibro(l)">Elimina</button><br />
