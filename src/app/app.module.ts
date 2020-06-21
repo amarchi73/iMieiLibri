@@ -28,6 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {ZXingScannerModule} from '@zxing/ngx-scanner';
 import {RicercaModule} from './ricerca/ricerca.module';
 import { InserimentoComponent } from './inserimento/inserimento.component';
+import { LibriService } from './servizi/libri.service';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,7 @@ import { InserimentoComponent } from './inserimento/inserimento.component';
 
         RicercaModule,
     ],
-  providers: [],
+  providers: [LibriService,],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

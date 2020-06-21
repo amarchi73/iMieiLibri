@@ -3,6 +3,7 @@ import {ModaleComponent} from '../ricerca/modale/modale.component';
 import {WebsocketService} from '../websocket.service';
 import {GochatService} from '../gochat.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+
 providers: [WebsocketService, GochatService]
 
 @Component({

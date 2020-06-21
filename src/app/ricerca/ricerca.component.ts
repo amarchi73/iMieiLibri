@@ -7,15 +7,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
-import { BarcodeFormat } from '@zxing/library';
 import { ContenitoreComponent} from './contenitore/contenitore.component';
-
+import { LibriService } from '../servizi/libri.service';
 
 @Component({
   selector: 'app-ricerca',
   templateUrl: './ricerca.component.html',
   styleUrls: ['./ricerca.component.css'],
-
 })
 export class RicercaComponent implements OnInit {
   elencoLibri: any; // = myLibri;
@@ -28,21 +26,14 @@ export class RicercaComponent implements OnInit {
   conta = 1;
   scansione = 0;
 
-  formatsEnabled: BarcodeFormat[] = [
-    BarcodeFormat.CODE_128,
-    BarcodeFormat.DATA_MATRIX,
-    BarcodeFormat.EAN_13,
-    BarcodeFormat.EAN_8,
-    BarcodeFormat.QR_CODE,
-  ];
-  constructor( private httpBoh:  HttpClient) {
+  constructor( private httpBoh:  HttpClient, private mieiLibri: LibriService ) {
 
   }
 
   ngOnInit(): void {
     console.log('caricati?');
 
-    this.httpBoh.get('https://www.googleapis.com/books/v1/volumes?q=isbn:9788815247902').subscribe(data => {
+    /*this.httpBoh.get('https://www.googleapis.com/books/v1/volumes?q=isbn:9788815247902').subscribe(data => {
       //window.alert(data[0]['title']);
       console.log(data);
     });
@@ -51,87 +42,32 @@ export class RicercaComponent implements OnInit {
       //window.alert(data[0]['title']);
       this.elencoLibri = data;
     });
-    this.barcode = "barcoode";
-  }
+    this.barcode = "barcoode"; */
+    var t=this;
+    var sub = this.mieiLibri.elencoLibriObservable(40).subscribe({
+      next(data){
+        console.log("=====");
+        console.log(data);
+        console.log("=====");
+        t.elencoLibri = data;
+      }
+    });
 
-  toggleScan() {
-    this.scanActive = !this.scanActive;
-  }
-
-  scanSuccessHandler(e: string) {
-    this.barcode = e;
-    console.log("arrivato");
-  }
-
-  scanErrorHandler(event){
-    console.log(event);
-  }
-  scanFailureHandler(event){
-    console.log(event);
+    /*this.mieiLibri.elencoLibri().subscribe(data => {
+      //window.alert(data[0]['title']);
+      this.elencoLibri = data;
+    });*/
   }
 
   salvaLibro(l){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        /*'Content-Type':  'multipart/form-data; boundary=---WebKitFormBoundary7MA4YWxkTrZu0gW',*/
-        /* 'Content-Type':  'form-data', */
-      })
-    };
-    console.log(l);
-    var formData = new FormData();
-    Object.keys(l).forEach(
-        (key) => {
-          formData.append(key, l[key]);
-        }
-    );
-
-    var ok = this.httpBoh.post<any>('http://localhost:8080/libriset', formData).subscribe(
-        (res) => window.console.log(res),
+    var ind=this.elencoLibri.indexOf(l);
+    this.mieiLibri.salvaLibro(l).subscribe(
+        (res) => {
+          window.console.log(res);
+          this.scansioni[ind].Id = res;
+        },
         (err) => window.console.log(err)
     );
   }
 
-  setData(n){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'multipart/form-data; boundary=---WebKitFormBoundary7MA4YWxkTrZu0gW',
-      })
-    };
-
-    /*
-     var jsonData = {
-   name: 'starwars',
-   year: 1977,
-   data: [{
-    'id': 'c5f6d301-328e-4167-8e13-504afb9a030e',
-    'item': 'bc4db36e-9e7c-478d-93a2-d4be32dacec1',
-    'qty': '1'
-  },
-  {
-    'id': 'c5f6d301-328e-4167-8e13-504afb9a030e',
-    'item': 'bc4db36e-9e7c-478d-93a2-d4be32dacec1',
-    'qty': '1'
-  },
- ],
-};
-var formData = new FormData();
-Object.keys(jsonData).forEach((key)=>{formData.append(key,jsonData[key])});
-    formData.append('uno', n);
-    formData.append('due', "due");
-
-     */
-
-    var formData = new FormData();
-    Object.keys(n).forEach(
-        (key) => {
-          formData.append(key, n[key]);
-        }
-    );
-
-    var ok = this.httpBoh.post<any>('http://localhost:8080/libriset', formData).subscribe(
-        (res) => window.console.log(res),
-        (err) => window.console.log(err)
-    );
-    //window.alert('set xxx' + n + "--" + ok);
-  }
 }
