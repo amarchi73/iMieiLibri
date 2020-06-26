@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	_ "github.com/mattn/go-sqlite3"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 
@@ -105,39 +105,107 @@ func handlerLibriSet(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Ciao Adler %s!", "aa") */
 }
 
+func cercaLibri(cosa string, quale string) map[int]riga{
+	righe:= make(map[int]riga)
+	var (
+		id int
+		t string
+		a string
+		isbn string
+		c string
+		d string
+	)
+	q := "SELECT id, titolo, Autore, isbn, copertina, descrizione FROM libri WHERE 1=1"
+	if quale=="vuoti"{
+		q = q + " AND titolo = ''"
+	}
+	if cosa=="/libri/titolo" {
+		q = q + " AND titolo LIKE '%"+quale+"%'"
+	}else if cosa=="/libri/autore" {
+		qq := strings.Split(quale,",");
+		ii := 0
+		q = q + " AND (1=0"
+		for ii=0; ii< len(qq); ii++ {
+			q = q + " OR autore LIKE '%" + qq[ii] + "%'"
+		}
+		q = q + ")"
+	}
+	fmt.Println(q)
+	r, err := db.Query( q )
+	fmt.Println(err)
+	i:=0
+	var rr riga
 
+	for r.Next() {
+		r.Scan(&id, &t, &a, &isbn, &c, &d)
+		rr.Titolo=t
+		rr.Autore=a
+		rr.Id=id
+		rr.Img=c
+		rr.Isbn=isbn
+		rr.Desc=d
+		fmt.Println(isbn)
+		righe[i]=rr
+		fmt.Println(righe[i])
+		i++
+	}
+	fmt.Println(righe)
+	return righe
+}
 
 func handlerLibri(w http.ResponseWriter, r *http.Request){
 	r.ParseForm()
 	quali := r.FormValue("quali")
+	h := r.URL
+	p, _:=h.Parse("titolo");
+	fmt.Println("host ",p, r.URL.Path);
 	fmt.Println("quali=",quali)
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	if(1==0) {
-		js, _ := ioutil.ReadFile("go/json.json")
-		fmt.Fprintf(w, "%s", js)
-	}else if quali=="vuoti" {
-		righe := elencoLibri(quali)
-		fmt.Fprintf(w, "[")
-		for i := 0; i < len(righe); i++ {
-			if(i>0){
-				fmt.Fprintf(w,",")
-			}
-			jsn, _ := json.Marshal(righe[i])
-			fmt.Fprintf(w, "%s", jsn)
-		}
-		fmt.Fprintf(w, "]")
-	}else{
-		righe := elencoLibri(quali)
-		fmt.Fprintf(w, "[")
-		for i := 0; i < len(righe); i++ {
-			if(i>0){
-				fmt.Fprintf(w,",")
-			}
-			jsn, _ := json.Marshal(righe[i])
-			fmt.Fprintf(w, "%s", jsn)
-		}
-		fmt.Fprintf(w, "]")
+
+	var righe map[int]riga;
+	switch r.Method {
+		case "GET":  righe = cercaLibri(r.URL.Path, quali)
 	}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	fmt.Fprintf(w, "[")
+	for i := 0; i < len(righe); i++ {
+		if(i>0){
+			fmt.Fprintf(w,",")
+		}
+		jsn, _ := json.Marshal(righe[i])
+		fmt.Fprintf(w, "%s", jsn)
+	}
+	fmt.Fprintf(w, "]")
+
+	return
+}
+
+func handlerAutori(w http.ResponseWriter, r *http.Request){
+	var (
+		a string
+	)
+	q := "SELECT distinct Autore FROM libri WHERE 1=1 ORDER BY Autore"
+
+	fmt.Println(q)
+	riga, err := db.Query( q )
+	fmt.Println(err)
+	i:=0
+
+	fmt.Fprintf(w, "[")
+
+	for riga.Next() {
+		for k:=0; k<1; k++ {
+			riga.Scan(&a)
+			if (i > 0) {
+				fmt.Fprintf(w, ",")
+			}
+			fmt.Fprintf(w, "\"%s\"", a)
+			i++
+		}
+	}
+	fmt.Fprintf(w, "]")
+
+
 }
 
 var conn *websocket.Conn
@@ -227,6 +295,9 @@ func main() {
 	fmt.Println("ciao!!!!")
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/libriset", handlerLibriSet)
+	http.HandleFunc("/libri/titolo", handlerLibri)
+	http.HandleFunc("/libri/autore", handlerLibri)
+	http.HandleFunc("/autori", handlerAutori)
 	http.HandleFunc("/libri", handlerLibri)
 	http.HandleFunc("/iban", handlerIban)
 	http.HandleFunc("/ws", handlerWS)
