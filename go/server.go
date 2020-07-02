@@ -62,6 +62,31 @@ func handlerIban(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(errdb)
 }
 
+func trovaCategoria(c string) int{
+	q := "SELECT id FROM categorie WHERE categoria = ?"
+	smtt, _ := db.Prepare(q)
+	r, _ := smtt.Query(c)
+	idc := 0;
+	for r.Next(){
+		r.Scan(&idc)
+	}
+	return idc;
+}
+func salvaCategoria(id int, cat string){
+	cats := strings.Split(cat, ",");
+	var idc int;
+
+	for i:=0; i< len(cats); i++ {
+		idc = trovaCategoria(cats[i]);
+		if idc==0{
+			res, _ := db.Exec("INSERT INTO categorie(categoria) VALUES($1)",strings.TrimSpace(cats[i]))
+			idd, _ := res.LastInsertId();
+			idc = int(idd)
+		}
+		db.Exec("INSERT INTO libricat(id_libro,id_categoria) VALUES($1,$2)",id,idc)
+	}
+}
+
 func handlerLibriSet(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseMultipartForm(0)
@@ -73,6 +98,8 @@ func handlerLibriSet(w http.ResponseWriter, r *http.Request) {
 	autore := r.FormValue("Autore")
 	img := r.FormValue("Img")
 	isbn := r.FormValue("Isbn")
+	Categorie := r.FormValue("Categorie");
+
 	// categorie := r.FormValue("Categorie")
 	fmt.Println("delID: ", delID)
 
@@ -85,7 +112,7 @@ func handlerLibriSet(w http.ResponseWriter, r *http.Request) {
 	}else if id!="0" {
 		_, err = db.Exec("UPDATE libri SET titolo=$1, descrizione=$2, copertina=$3, Autore=$4, isbn=$5 WHERE id=$6", titolo, desc, img, autore, isbn, id);
 	}else{
-		res, err1 := db.Exec("INSERT INTO libri(titolo,descrizione,copertina,Autore,isbn) VALUES($1,$2,$3,$4,$5)", titolo, desc, img, autore, isbn);
+		res, err1 := db.Exec("INSERT INTO libri(titolo,descrizione,copertina,Autore,isbn,Categorie) VALUES($1,$2,$3,$4,$5,$6)", titolo, desc, img, autore, isbn);
 		err=err1
 		idd, _ := res.LastInsertId();
 		fmt.Println("idd: ", idd, err)
@@ -93,6 +120,9 @@ func handlerLibriSet(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("err: ", err)
 	fmt.Println("id: ", id, isbn)
+
+	iid, _ := strconv.ParseInt(id, 10, 32)
+	salvaCategoria(int(iid),Categorie);
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	fmt.Fprintf(w, id)
